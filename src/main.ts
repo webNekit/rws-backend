@@ -21,10 +21,10 @@ async function bootstrap() {
     origin: configService.getOrThrow<string>('CORS_ORIGIN'),
   });
 
-  app.use(cookieParser);
+  app.use(cookieParser());
   app.setGlobalPrefix('api');
   app.enableVersioning({
-    defaultVersion: 'v1',
+    defaultVersion: '1',
     type: VersioningType.URI,
   });
   await app.listen(process.env.PORT ?? 9000);
