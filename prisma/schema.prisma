@@ -13,9 +13,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model Role {
-  id Int @id @default(autoincrement())
+  id   Int    @id @default(autoincrement())
   name String @unique
 
   users User[]
@@ -29,16 +28,47 @@ model Role {
 model User {
   id Int @id @default(autoincrement())
 
-  name String
-  email String @unique
-  password String
+  name         String
+  email        String  @unique
+  password     String
   refreshToken String? @map("refresh_token")
 
-  role        Role?    @relation(fields: [roleId], references: [id])
-  roleId      Int? @map("role_id")
+  role   Role? @relation(fields: [roleId], references: [id])
+  roleId Int?  @map("role_id")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("users")
+}
+
+model NewsCategory {
+  id Int @id @default(autoincrement())
+
+  name String @unique
+  slug String @unique
+
+  news News[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("news_category")
+}
+
+model News {
+  id Int @id @default(autoincrement())
+
+  title    String
+  slug     String  @unique
+  content  String
+  imageUrl String? @map("image_url")
+
+  newsCategory   NewsCategory? @relation(fields: [newsCategoryId], references: [id])
+  newsCategoryId Int? @map("news_category_id")
+
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
+
+  @@map("news")
 }
